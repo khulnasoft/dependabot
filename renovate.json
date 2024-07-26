@@ -1,0 +1,105 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": [
+    "khulnasoft",
+    "pre-commit",
+    "dockerfile",
+    "regex"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "pre-commit": {
+    "fileMatch": [
+      ".pre-commit-config.yaml"
+    ],
+    "commitBody": "changelog: chore"
+  },
+  "khulnasoft": {
+    "commitBody": "changelog: ci"
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "\\.khulnasoft-ci\\.yml"
+      ],
+      "matchStrings": [
+        "MOCK_IMAGE: (?<depName>.*?):(?<currentValue>.*?)\\n"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "\\.khulnasoft-ci\\.yml"
+      ],
+      "matchStrings": [
+        "CODACY_VERSION: \"(?<currentValue>.*?)\"\\n"
+      ],
+      "depNameTemplate": "codacy/codacy-coverage-reporter",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": [
+        "\\.khulnasoft-ci\\.yml"
+      ],
+      "matchStrings": [
+        "DOCKER_VERSION: \"(?<currentValue>.*?)\"\\n"
+      ],
+      "depNameTemplate": "docker",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "\\.khulnasoft-ci\\.yml"
+      ],
+      "matchStrings": [
+        "NODE_VERSION: \"(?<currentValue>.*?)\"\\n"
+      ],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "^docker-compose\\.yml"
+      ],
+      "matchStrings": [
+        "image: \\$\\{\\w+:-(?<depName>.*?):(?<currentValue>.*?)\\}"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile\\.core"
+      ],
+      "matchStrings": [
+        "ARG DOCKER_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "docker",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile\\.core"
+      ],
+      "matchStrings": [
+        "ARG JEMALLOC_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "jemalloc/jemalloc",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchFiles": [
+        ".docker-compose.yml"
+      ],
+      "labels": ["dependencies", "docker"]
+    },
+    {
+      "matchFiles": [
+        "\\.khulnasoft-ci\\.yml"
+      ],
+      "groupName": "khulnasoft-ci"
+    }
+  ]
+}
